@@ -6,6 +6,14 @@ class window.Hand extends Backbone.Collection
 
   hit: ->
     @add(@deck.pop()).last()
+    if @scores()[0] > 21
+      @trigger('bust')
+      # trigger a bust event that disables the HIT button
+
+  stand: ->
+    @trigger('stand')
+    # if player, tell dealer to finish up the round.
+    # but the dealer should deal itself cards..
 
   scores: ->
     # The scores are an array of potential scores.
