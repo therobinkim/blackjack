@@ -14,17 +14,19 @@ class window.AppView extends Backbone.View
     # get new hands for PLAYER and DEALER
     # recreate bust listener to disable HIT button
     "click .new-button": ->
-      $('button').removeAttr('disabled')
-      @model.newHand();
+      @model.newHand()
       @render()
 
   initialize: ->
     # if BUST or STAND, then disable action button
-    @model.on 'playerBust', => @disableButtons()
-    @model.on 'playerStand', => @disableButtons()
+    @model.on 'playerBust', =>
+      @disableButtons()
+    @model.on 'playerStand', =>
+      @disableButtons()
     @render()
 
   disableButtons: ->
+    console.log($('.hit-button').attr('disabled'))
     $('.hit-button').attr('disabled', 'disabled')
     $('.stand-button').attr('disabled', 'disabled')
 

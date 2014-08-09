@@ -6,8 +6,11 @@ class window.Hand extends Backbone.Collection
 
   hit: ->
     @add(@deck.pop()).last()
+    if @scores()[0] == 21 or @scores()[1] == 21
+      @stand()
     if @scores()[0] > 21
       @trigger('bust')
+      @status('BUST!')
       # trigger a bust event that disables the HIT button
 
   stand: ->
@@ -31,3 +34,8 @@ class window.Hand extends Backbone.Collection
       score + if card.get 'revealed' then card.get 'value' else 0
     , 0
     if hasAce then [score, score + 10] else [score]
+
+  status: (st) ->
+    if(st != undefined)
+      @st = st
+    @st
