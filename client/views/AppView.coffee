@@ -12,33 +12,17 @@ class window.AppView extends Backbone.View
     # enable all buttons
     # get new hands for PLAYER and DEALER
     # recreate bust listener to disable HIT button
-    "click .new-button": ->
-      @model.newHand()
-      @render()
+    "click .new-button": -> @model.newHand()
 
-  initialize: ->
+  initialize: =>
     # if BUST or STAND, then disable action button
-    @model.on 'playerBust', =>
-      @disableButtons()
-    @model.on 'playerStand', =>
-      @disableButtons()
-
-    @model.on 'dealerBust', =>
-    @model.on 'dealerStand', =>
-      # @partialRender()
-    @model.on 'partialRender', =>
-      # @partialRender()
+    @model.on 'disableButtons', => @disableButtons()
+    @model.on 'render', =>  @render()
     @render()
 
   disableButtons: ->
     $('.hit-button').attr('disabled', 'disabled')
     $('.stand-button').attr('disabled', 'disabled')
-
-  partialRender: ->
-    @player.render()
-    @dealer.render()
-    @$('.player-hand-container').html @player.el
-    @$('.dealer-hand-container').html @dealer.el
 
   render: ->
     @$el.children().detach()

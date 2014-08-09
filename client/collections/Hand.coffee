@@ -6,7 +6,10 @@ class window.Hand extends Backbone.Collection
 
   hit: =>
     console.log('hit')
-    @add(@deck.pop()).last()
+    pop = @deck.pop() 
+    @add(pop).last()
+    if(pop == undefined)
+      alert 'no more cards :('
     if @scores() == 21
       @stand()
     if @scores() > 21
