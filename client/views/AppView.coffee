@@ -5,7 +5,6 @@ class window.AppView extends Backbone.View
     <div class="player-hand-container"></div>
     <div class="dealer-hand-container"></div>
   '
-
   events:
     "click .hit-button": -> @model.get('playerHand').hit()
     "click .stand-button": -> @model.get('playerHand').stand()
@@ -23,15 +22,28 @@ class window.AppView extends Backbone.View
       @disableButtons()
     @model.on 'playerStand', =>
       @disableButtons()
+
+    @model.on 'dealerBust', =>
+    @model.on 'dealerStand', =>
+      # @partialRender()
+    @model.on 'partialRender', =>
+      # @partialRender()
     @render()
 
   disableButtons: ->
-    console.log($('.hit-button').attr('disabled'))
     $('.hit-button').attr('disabled', 'disabled')
     $('.stand-button').attr('disabled', 'disabled')
+
+  partialRender: ->
+    @player.render()
+    @dealer.render()
+    @$('.player-hand-container').html @player.el
+    @$('.dealer-hand-container').html @dealer.el
 
   render: ->
     @$el.children().detach()
     @$el.html @template()
-    @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
-    @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+    @player = new HandView(collection: @model.get 'playerHand')
+    @dealer = new HandView(collection: @model.get 'dealerHand')
+    @$('.player-hand-container').html @player.el
+    @$('.dealer-hand-container').html @dealer.el

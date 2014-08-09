@@ -4,22 +4,24 @@ class window.Hand extends Backbone.Collection
 
   initialize: (@array, @deck, @isDealer) ->
 
-  hit: ->
+  hit: =>
+    console.log('hit')
     @add(@deck.pop()).last()
-    if @scores()[0] == 21 or @scores()[1] == 21
+    if @scores() == 21
       @stand()
-    if @scores()[0] > 21
-      @trigger('bust')
+    if @scores() > 21
       @status('BUST!')
+      @trigger('bust')
       # trigger a bust event that disables the HIT button
 
   stand: ->
     @trigger('stand')
 
-  play: ->
+  play: =>
     @array[0].flip()
     # need to reveal first card, then do the following
-    while(@scores()[0] < 17)
+    while(@scores() < 17)
+      # console.log('inside play loop')
       @hit()
     @stand()
 
@@ -33,9 +35,14 @@ class window.Hand extends Backbone.Collection
     score = @reduce (score, card) ->
       score + if card.get 'revealed' then card.get 'value' else 0
     , 0
-    if hasAce then [score, score + 10] else [score]
+    if hasAce
+      if score >= 21 then score
+      else if score + 10 > 21 then score
+      else score + 10
+    else score
 
-  status: (st) ->
-    if(st != undefined)
+  status: (st) =>
+    if st!= undefined
       @st = st
+      @trigger('rerender')
     @st

@@ -6,7 +6,7 @@ class window.HandView extends Backbone.View
   template: _.template '<h2><% if(isDealer){ %>Dealer<% }else{ %>You<% } %> (<span class="score"></span>) <span class="status"></span></h2>'
 
   initialize: ->
-    @collection.on 'add remove change', => @render()
+    @collection.on 'add remove change rerender', => @render()
     @render()
 
   render: ->
