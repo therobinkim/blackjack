@@ -8,6 +8,10 @@ class window.App extends Backbone.Model
 
     (@get 'playerHand').on 'bust', => @trigger('playerBust')
     (@get 'playerHand').on 'stand', => @trigger('playerStand')
+    @on 'playerStand', => (@get 'dealerHand').play()
+
+    (@get 'dealerHand').on 'bust', => @trigger('dealerBust')
+    (@get 'dealerHand').on 'stand', => @trigger('dealerStand')
 
   newHand: ->
     @set 'playerHand', (@get 'deck').dealPlayer()

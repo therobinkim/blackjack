@@ -2,7 +2,7 @@ class window.Hand extends Backbone.Collection
 
   model: Card
 
-  initialize: (array, @deck, @isDealer) ->
+  initialize: (@array, @deck, @isDealer) ->
 
   hit: ->
     @add(@deck.pop()).last()
@@ -12,8 +12,13 @@ class window.Hand extends Backbone.Collection
 
   stand: ->
     @trigger('stand')
-    # if player, tell dealer to finish up the round.
-    # but the dealer should deal itself cards..
+
+  play: ->
+    @array[0].flip()
+    # need to reveal first card, then do the following
+    while(@scores()[0] < 17)
+      @hit()
+    @stand()
 
   scores: ->
     # The scores are an array of potential scores.
