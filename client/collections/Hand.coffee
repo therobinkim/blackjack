@@ -5,15 +5,12 @@ class window.Hand extends Backbone.Collection
   initialize: (@array, @deck, @isDealer) ->
 
   hit: =>
-    console.log('hit')
-    pop = @deck.pop() 
+    pop = @deck.pop()
     @add(pop).last()
-    if(pop == undefined)
-      alert 'no more cards :('
     if @scores() == 21
       @stand()
     if @scores() > 21
-      @status('BUST!')
+      if(@isDealer) then @status 'BUSTS!' else @status 'BUST!'
       @trigger('bust')
       # trigger a bust event that disables the HIT button
 
@@ -24,7 +21,6 @@ class window.Hand extends Backbone.Collection
     @array[0].flip()
     # need to reveal first card, then do the following
     while(@scores() < 17)
-      # console.log('inside play loop')
       @hit()
     @stand()
 
@@ -38,11 +34,17 @@ class window.Hand extends Backbone.Collection
     score = @reduce (score, card) ->
       score + if card.get 'revealed' then card.get 'value' else 0
     , 0
-    if hasAce
-      if score >= 21 then score
-      else if score + 10 > 21 then score
-      else score + 10
-    else score
+    # this logic deals with when dealer has a hidden ace
+    if @isDealer and hasAce and (@.at(0).get 'value') == 1 and (@.at(0).get 'revealed') == false
+      score
+    else
+      if hasAce
+        if score >= 21 then score
+        else if score + 10 > 21 then score
+        # if flipped card is ace, DON'T ADD 10!
+        else score + 10
+      else
+        score
 
   status: (st) =>
     if st!= undefined
