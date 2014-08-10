@@ -43,8 +43,8 @@ class window.App extends Backbone.Model
       player.status 'lose!'
       dealer.status 'WINS!'
     else
-      player.status 'PUSH!'
-      dealer.status 'PUSH!'
+      player.status 'tie! PUSH!'
+      dealer.status 'ties! PUSH!'
 
   immediateBlackJack: =>
     playerScore = (@get 'playerHand').scores()
@@ -63,11 +63,11 @@ class window.App extends Backbone.Model
       true
     else if(playerScore == 21)
       (@get 'playerHand').status 'have BLACKJACK! WINNER!'
-      (@get 'dealerHand').status 'Loses!'
+      (@get 'dealerHand').status 'loses!'
       @set 'blackjack', true
       true
     else if(dealerScore == 21)
-      (@get 'playerHand').status 'Lose!'
+      (@get 'playerHand').status 'lose!'
       (@get 'dealerHand').status 'has BLACKJACK! WINNER!'
       @set 'blackjack', true
       true
